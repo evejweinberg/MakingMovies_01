@@ -1,6 +1,6 @@
 <HTML>
 <HEAD>
-<TITLE>Amazon CloudFront Streaming with JW Player 6</TITLE>	
+<TITLE>local player</TITLE>	
 
 <!-- Call the JW Player JavaScript file, jwplayer.js. 
 Replace WEB-DISTRIBUTION-DOMAIN-NAME with the domain name of your 
@@ -8,13 +8,50 @@ CloudFront web distribution, for example, d1234.cloudfront.net
 (begins with "d"). This causes a browser to download the JW Player file 
 before streaming begins.
 -->
+<!-- <script type='text/javascript' src='https://d3b1wx5otkxco2.cloudfront.net/jwplayer.js'></script> -->
 
-<script type='text/javascript' src='https://d3b1wx5otkxco2.cloudfront.net/jwplayer.js'></script>
+
+
+
+
 
 </HEAD>
 
 <BODY>
-<H1>This video is streamed by CloudFront and played by JW Player 6.</H1>
+
+<!-- option #1 embedded player == WORKING
+but where should I find this movie file so I can map it onto another elelent on my webpage?
+-->
+<script src="//content.jwplatform.com/players/M5aiTS72-eEOS79hx.js"></script>
+
+
+
+<!-- Option 2: The Cloud Player-->
+ <script type='text/javascript' src='http://content.jwplatform.com/libraries/wob2Z8EB.js'></script>
+<!-- option #2 part 2 -->
+<div id="myElement">Option #2 loading.....</div>
+<script type="text/javascript">
+var playerInstance = jwplayer("myElement");
+playerInstance.setup({
+	//not sure if this is the right path to the file??
+    file: "rtmp://s1h3ma6n47fcgm.cloudfront.net/cfx/st/park1.MP4",
+    //loaded a temp image
+    image: "http://animaliaz-life.com/image.php?pic=/data_images/dog/dog7.jpg",
+    width: 740,
+    height: 400,
+    title: 'Basic Video Embed',
+    description: 'A video with a basic title and description!',
+    mediaid: '123456'
+});
+</script>
+
+
+<!-- option #3 self hosted (meaning AWS hosted?) -->
+​<script src="http://d3b1wx5otkxco2.cloudfront.net/jwplayer.js"></script>
+
+<script>jwplayer.key="D+iKom8ci6/djJF/OKVP6RRTOWWHetRWWqeVgw==";</script>
+
+
 
 <!-- Replace RTMP-DISTRIBUTION-DOMAIN-NAME with the domain name of your 
 RTMP distribution, for example, s5678.cloudfront.net (begins with "s").
@@ -25,14 +62,14 @@ my-vacation.mp4, enter my-vacation.mp4. You might need to prepend "mp4:" to the
 name of your video file, for example, mp4:my-vacation.mp4.
 -->
 
-<div id='mediaplayer'></div>
+<!-- <div id='mediaplayer'></div>
 <script type="text/javascript">
    jwplayer('mediaplayer').setup({
       file: "rtmp://s1h3ma6n47fcgm.cloudfront.net/cfx/st/park1.MP4",
       width: "720",
       height: "480"
    });
-</script>
+</script> -->
 
 </BODY>
 </HTML>
