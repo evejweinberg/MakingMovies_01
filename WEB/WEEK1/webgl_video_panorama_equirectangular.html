@@ -73,13 +73,13 @@
 
     function setFov(fov) {
         camera.setFov(fov);
- }
+    }
 
     function setLens(lens) {
- var fov = camera.setLens(lens);
+        var fov = camera.setLens(lens);
 
 
-  }
+    }
 
 
 
@@ -126,7 +126,10 @@
         video.height = 960;
         video.autoplay = true;
         video.loop = true;
-        video.src = "../../360footage/inside.mp4";
+        video.setAttribute('crossorigin', 'anonymous');
+        video.src = "../360/mainB.mp4";
+        video.load(); // must call after setting/changing source
+        video.play();
 
         var texture = new THREE.VideoTexture(video);
         texture.minFilter = THREE.LinearFilter;
