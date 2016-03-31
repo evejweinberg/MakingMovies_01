@@ -122,11 +122,12 @@
         geometry.scale(-1, 1, 1);
 
         var video = document.createElement('video');
+        //did this come directly from the render?
         video.width = 1920;
         video.height = 960;
         video.autoplay = true;
         video.loop = true;
-        video.setAttribute('crossorigin', 'anonymous');
+        // video.setAttribute('crossorigin', 'anonymous');
         video.src = "../360/mainB.mp4";
         video.load(); // must call after setting/changing source
         video.play();
