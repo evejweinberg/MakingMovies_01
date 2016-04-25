@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Vue test</title>
+    <script src="../libs/three.min.js"></script>
+    <script src="../js/Detector.js"></script>
+    <script src="../libs/stats.min.js"></script>
+    <script src="../libs/vue.js"></script>
+    <script src="../libs/jquery-1.12.0.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/vue/latest/vue.js"></script> -->
+</head>
+<style type="text/css">
+.canvas {
+    border: black solid 1px;
+    width: 640px;
+    height: 320px;
+}
+</style>
+
+<body>
+    <!-- <select>
+    <option value="0">No age limit</option>
+    <option :value="n+6" v-for="n in 85">{{n+6}}</option>
+  </select> -->
+    <select v-model="select">
+        <template v-for="option in options">
+            <option v-bind:value="option" v-bind:selected="option == savedOption">{{ option }}</option>
+        </template>
+    </select>
+    <div id="scene1">
+        <p>{{ title }}</p>
+        <p>Shot Length: {{ length }}
+            <input v-model="length">
+        </p>
+        <p>Playing:
+            <input v-model="playing">
+        </p>
+        <p>currentCamZ: {{ cameraZ }}
+         
+        </p>
+        <p>startCamZ: {{ startDistPlayer1 }}
+            <input v-model="startDistPlayer1" type="number">
+        </p>
+        <p>EndCamZ: {{ endDistPlayer1 }}
+            <input v-model="endDistPlayer1" type="number">
+        </p>
+        <label>CameraX slider</label>  
+  <input type='range' min="-1000" max = "1000"v-model='camXslider'>
+        
+        <p>cameraPOV
+            <input v-model="cameraPOV" v-on:keyup.enter="changeCameraPOV">
+        </p>
+        <div class="canvas" id="canvas1"></div>
+    </div>
+    <script src="vueTest2.js"></script>
+    <script>
+    // var container, stats;
+    // var camera, scene;
+    // var renderer;
+    // var mesh, mesh2, helper;
+    // var playing = false
+    // var movespeed = 1
+    // var endDistPlayer1 = 700
+    // var startDistPlayer1 = 400
+
+    // init();
+
+    // animate();
+
+    // function init() {
+
+    //     container = document.getElementById('canvas1');
+    //     camera = new THREE.PerspectiveCamera(vmScene1.cameraPOV, 16 / 9, 1, 1000);
+    //     camera.position.z = startDistPlayer1;
+    //     // camera.position.x = camXslider
+    //     scene = new THREE.Scene();
+    //     // var texture = new THREE.TextureLoader().load('textures/crate.gif');
+    //     var geometry = new THREE.BoxGeometry(200, 200, 200);
+    //     var material = new THREE.MeshBasicMaterial({
+    //         color: 0xff5345
+    //     });
+    //     mesh = new THREE.Mesh(geometry, material);
+    //     scene.add(mesh);
+    //     renderer = new THREE.WebGLRenderer();
+    //     renderer.setPixelRatio(window.devicePixelRatio);
+    //     renderer.setSize($("#canvas1").width(), $("#canvas1").height());
+    //     container.appendChild(renderer.domElement);
+
+    //     window.addEventListener('resize', onWindowResize, false);
+
+
+
+    // }
+
+    // function onWindowResize() {
+    //     camera.aspect = 16 / 9;
+    //     camera.updateProjectionMatrix();
+    //     renderer.setSize($("#canvas1").width(), $("#canvas1").height());
+    // }
+
+
+    // function animate() {
+    //     requestAnimationFrame(animate);
+    //     renderer.render(scene, camera);
+
+    //     movespeed = ((Math.abs(vmScene1.startDistPlayer1-vmScene1.endDistPlayer1))/parseInt(vmScene1.length,10))/60
+
+    //     startDistPlayer1 = vmScene1.startDistPlayer1
+    //     if (vmScene1.playing == 'true') {
+           
+
+    //         camera.position.z = vmScene1.cameraZ += movespeed;
+    //         // console.log(camera.position.z)
+    //         if (camera.position.z > endDistPlayer1) {
+    //             camera.position.z = startDistPlayer1
+    //             vmScene1.cameraZ = startDistPlayer1
+    //         }
+
+
+    //         camera.position.x = vmScene1.camXslider;
+    //         console.log(camera.position.x)
+    //         camera.fov = parseInt(vmScene1.cameraPOV)
+           
+
+    //     } else {
+    //         camera.position.z = camera.position.z
+    //     }
+    // }
+    </script>
+</body>
+
+</html>

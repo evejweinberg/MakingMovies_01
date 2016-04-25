@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Vue test</title>
+    <script src="../libs/vue.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/vue/latest/vue.js"></script> -->
+</head>
+
+<body>
+<div id="app">
+{{title}}
+
+</div>
+    <div id="container">
+        <!-- every time you hit enter, call method addToDo -->
+        <!-- look for the vuew model called "newTodo" and on enter run this method-->
+        <input v-model="newTodo" v-on:keyup.enter="addTodoW">
+        <ul>
+            <!-- make a view for ____ inside ____ -->
+            <li v-for="todo in todos">
+                <span>{{ todo.text }}</span>
+                <button v-on:click="removeTodo($index)">X</button>
+            </li>
+        </ul>
+    </div>
+    <script src="vueTest1.js"></script>
+    <!-- -->
+    <!-- -->
+    <!-- -->
+    <script>
+    //create a view instance
+    var vm = new Vue({
+        //add some options
+        el: '#container',
+        data: {
+            newTodo: ' ',
+            todos: [{
+                text: ' Example'
+            }]
+        },
+        created: function() {
+            // `this` points to the vm instance
+            console.log('CREATED! this.newTodo is: ' + this.newTodo)
+        },
+        methods: {
+            addTodoW: function() {
+                //text equals Vue.newTodo element, trimmed
+                var text = this.newTodo.trim()
+                if (text) {
+                    //if text exists take the array todos and push a new object with this info
+                    this.todos.push({
+                        text: text
+                    })
+                    this.newTodo = 'Hello,'
+                }
+            },
+            removeTodo: function(index) {
+                this.todos.splice(index, 1)
+            }
+        }
+    })
+
+
+    // new Vue({
+    //     el: '#app',
+    //     data: {
+    //         message: 'Default!'
+    //     },
+    //     methods: {
+    //         reverseMessage: function() {
+    //             this.message = this.message.split('').reverse().join('')
+    //         }
+    //     }
+    // })
+
+
+    // new Vue({
+    //     //which element is it going after
+    //     el: '.list',
+    //     data: {
+    //         stuff: [{
+    //             blah: 'Learn JavaScript'
+    //         }, {
+    //             blah: 'Learn Vue.js'
+    //         }, {
+    //             blah: 'Build Something Awesome'
+    //         }]
+    //     }
+    // })
+    </script>
+</body>
+
+</html>
