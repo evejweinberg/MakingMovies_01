@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!-- saved from url=(0037)https://ncc299.itp.io:3030/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<script src="./Nataliascollage_files/socket.io.js"></script><style type="text/css"></style>
+		<title>collage</title>
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<script src="./Nataliascollage_files/socket.io.js"></script>
+		 <!-- <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script> -->
+		<script type="text/javascript">
+			
+			var socket = io.connect('https://ncc299.itp.io:3030/');
+
+			var video;
+			var thecanvas;
+
+
+			function init() {
+				
+				window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
+				navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+				video=document.getElementById("thevideo");
+				if (navigator.getUserMedia) {
+					navigator.getUserMedia({video: true}, function(stream) {
+						video.src = window.URL.createObjectURL(stream) || stream;
+						video.play();
+						}, function(error) {alert("Failure " + error.code);}
+					);
+				}
+
+				thecanvas = document.getElementById("thecanvas");
+				var thecontext = thecanvas.getContext('2d');
+				var draw = function() {
+					thecontext.drawImage(video,0,0,video.width,video.height);
+					var dataUrl = thecanvas.toDataURL('image/webp', 1);
+					document.getElementById('imagefile').src = dataUrl;
+					socket.emit('image', dataUrl);
+					setTimeout(draw,3000);
+				};
+
+				draw();	
+
+				};
+
+			window.addEventListener('load',init);
+			
+
+		</script>
+
+	</head>
+	<body data-pinterest-extension-installed="cr1.39.1">
+
+		<script src="./Nataliascollage_files/three.js"></script>
+		<script src="./Nataliascollage_files/TrackballControls.js"></script>
+		<script src="./Nataliascollage_files/cubes.js"></script><div style="cursor: auto;"><canvas width="547" height="884" style="width: 547px; height: 884px;"></canvas><div style="position: absolute; top: 10px; width: 100%; text-align: center;">COLLAGE</div></div> 
+
+		<video id="thevideo" width="310" height="240" src="blob:https%3A//ncc299.itp.io%3A3030/f4f03b69-7e10-4dd7-92b9-f1ffefec596a"></video>
+		<button id="button" type="button">Click Me!</button>
+<!-- 		<canvas id="thecanvas" width="310" height="240"></canvas>
+ -->	
+	<style>
+	video {
+	    position: absolute;
+	    left: 1000px;
+	    top: 500px;
+	    z-index: 1;
+	}
+
+	button {
+	    position: absolute;
+	    left: 1200px;
+	    top: 700px;
+	    z-index: 1;
+	}
+	</style>
+
+	
+</body></html>

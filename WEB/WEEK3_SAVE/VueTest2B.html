@@ -19,10 +19,7 @@
 </style>
 
 <body>
-    <!-- <select>
-    <option value="0">No age limit</option>
-    <option :value="n+6" v-for="n in 85">{{n+6}}</option>
-  </select> -->
+    
     <select v-model="select">
         <template v-for="option in options">
             <option v-bind:value="option" v-bind:selected="option == savedOption">{{ option }}</option>
