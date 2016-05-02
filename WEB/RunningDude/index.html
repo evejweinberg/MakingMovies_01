@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Three JS Skinned Character</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r75/three.min.js"></script>
+    <!-- <script src="animation/three.min.js"></script>  -->
+    <script src="animation/Animation.js"></script>
+		<script src="animation/AnimationHandler.js"></script>
+		<script src="animation/KeyFrameAnimation.js"></script>
+    <script type="text/javascript" src="ColladaLoader.js"></script>
+
+    <style>
+        body {
+            /* set margin to 0 and overflow to hidden, to go fullscreen */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+</div>
+
+<!-- Javascript code that runs our Three.js examples -->
+<script type="text/javascript">
+    var camera, scene, renderer;
+    
+    var character;
+    var characterAngle = 0;
+    
+    var clock = new THREE.Clock();
+    
+    init();
+    
+    function init() {
+      container = document.getElementById( 'container' );
+      camera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 1, 10000 );
+      camera.position.set( 0, 15, 40 );
+      camera.rotation.x = -0.3;
+      scene = new THREE.Scene();
+      
+      renderer = new THREE.WebGLRenderer( { antialias: true } );
+      renderer.setClearColor(0x12303b);
+      renderer.setPixelRatio( window.devicePixelRatio );
+      renderer.setSize( window.innerWidth, window.innerHeight );
+      renderer.sortObjects = false;
+      container.appendChild( renderer.domElement );
+      
+      // LIGHTS
+      var light = new THREE.HemisphereLight( 0xffffbb, 0x6699cc, 1 );
+      scene.add( light );
+      
+      var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.1 );
+      directionalLight.position.set( 0, 0, 1 );
+      scene.add( directionalLight );
+      
+      // LOAD CHARACTER
+      var loader = new THREE.ColladaLoader();
+            loader.load( "untitled.dae", function ( collada ) {
+
+      // loader.load( "character_run.dae", function ( collada ) {
+        // Find the character in the middle of the collada scene
+        collada.scene.traverse( function ( child ) {
+          if ( child instanceof THREE.SkinnedMesh ) {
+            character = child;
+            scene.add(character);
+            character.scale(.01,.01,.01)
+            
+            var animation = new THREE.Animation( child, child.geometry.animation );
+            animation.play();
+          }
+        } );
+      } );
+      
+      window.addEventListener( 'resize', onWindowResize, false );
+      
+      animate();
+    }
+    
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize( window.innerWidth, window.innerHeight );
+    }
+    
+    function animate() {
+      // Code to move the character
+      if(character) {
+        // Check if any keys are pressed
+        if(hDirection != 0 || vDirection != 0) {
+          // Then, animate the character run cycle
+          THREE.AnimationHandler.update( clock.getDelta() );
+          
+          // The direction the character should head, based on the pressed keys
+          var idealAngle = 0;
+          
+          if(hDirection == 0) {
+            idealAngle = (vDirection > 0) ? 0 : Math.PI;
+          } else {
+            idealAngle = hDirection * (Math.PI / 2);
+            
+            if(vDirection == 1) {
+              idealAngle *= 0.5;
+            } else if(vDirection == -1) {
+              idealAngle += idealAngle * 0.5;
+            }
+          }
+          
+          if(Math.abs(idealAngle - characterAngle) < 0.1) {
+            // If the character's actual angle is close to the ideal, just use that
+            characterAngle = idealAngle;
+          } else if(Math.abs(idealAngle - characterAngle) <= Math.PI) {
+            // Otherwise, rotate slightly in the direction of the ideal angle
+            characterAngle += 0.1 * Math.sign(idealAngle - characterAngle);
+          } else {
+            // ...Except in cases like moving from 170deg to -170deg. That's only
+            // a difference of 20 degrees, but the computer doesn't realize that.
+            // So, just tell the computer to move the opposite direction to how it
+            // would like to move under those circumstances.
+            characterAngle -= 0.1 * Math.sign(idealAngle - characterAngle);
+          }
+          
+          // Keep character angle bounded in the range -180 to 180 degrees
+          if(characterAngle > Math.PI) {
+            characterAngle -= 2 * Math.PI;
+          } else if(characterAngle <= -Math.PI) {
+            characterAngle += 2 * Math.PI;
+          }
+          
+          character.rotation.y = characterAngle;
+          
+          character.position.x += Math.sin(characterAngle) * 0.08;
+          character.position.z += Math.cos(characterAngle) * 0.08;
+        }        
+      }
+      
+      requestAnimationFrame( animate, renderer.domElement );
+      renderer.render( scene, camera );
+    }
+    
+    // Code for capturing Keyboard Input
+    var keyMap = {'left': false, 'up': false, 'right': false, 'down': false};
+    var hDirection = 0;
+    var vDirection = 0;
+    
+    window.addEventListener('keydown', function(evt) {
+      if(evt.keyCode == 37) {
+        keyMap.left = true;
+        hDirection = -1;
+      } else if(evt.keyCode == 38) {
+        keyMap.up = true;
+        vDirection = -1;
+      } else if(evt.keyCode == 39) {
+        keyMap.right = true;
+        hDirection = 1;
+      } else if(evt.keyCode == 40) {
+        keyMap.down = true;
+        vDirection = 1;
+      }
+    });
+    
+    window.addEventListener('keyup', function(evt) {
+      if(evt.keyCode == 37) {
+        keyMap.left = false;
+        hDirection = (keyMap.right) ? 1 : 0;
+      } else if(evt.keyCode == 38) {
+        keyMap.up = false;
+        vDirection = (keyMap.down) ? 1 : 0;
+      } else if(evt.keyCode == 39) {
+        keyMap.right = false;
+        hDirection = (keyMap.left) ? -1 : 0;
+      } else if(evt.keyCode == 40) {
+        keyMap.down = false;
+        vDirection = (keyMap.up) ? -1 : 0;
+      }
+    });
+</script>
+</body>
+</html>
